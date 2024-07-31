@@ -18,6 +18,8 @@
             background-color: rgba(0, 0, 0, 0.5);
             align-items: center;
             justify-content: center;
+            z-index: 50;
+            /* Ensures modal is on top */
         }
 
         .modal-content {
@@ -25,18 +27,25 @@
             padding: 2rem;
             border-radius: 0.5rem;
             text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        /* Add custom styles for the body */
+        body {
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <div class="container mx-auto p-4 bg-white rounded shadow-lg">
-        <h1 class="text-2xl font-bold mb-4">Quiz Started</h1>
-        <p class="mb-4">Instructions: <span class="bg-yellow-200 text-yellow-800 p-1 rounded">Do not switch tabs or
+    <div class="w-full max-w-xl mx-auto p-4 bg-white rounded shadow-lg">
+        <h1 class="text-2xl font-bold mb-4 text-center">Quiz Started</h1>
+        <p class="mb-4 text-center">Instructions: <span class="bg-yellow-200 text-yellow-800 p-1 rounded">Do not switch
+                tabs or
                 applications, or your quiz will be marked as zero.</span></p>
-        
-        <!-- Dummy MCQs -->
+        <!-- Quiz content goes here -->
         <div class="mb-4">
             <h2 class="font-bold mb-2">Question 1: What does CPU stand for?</h2>
             <ul class="list-disc pl-4">
@@ -60,17 +69,40 @@
         <div class="mb-4">
             <h2 class="font-bold mb-2">Question 3: What is the main function of an operating system?</h2>
             <ul class="list-disc pl-4">
-                <li><label><input type="radio" name="q3" value="a"> To manage computer hardware and software resources</label></li>
+                <li><label><input type="radio" name="q3" value="a"> To manage computer hardware and software
+                        resources</label></li>
                 <li><label><input type="radio" name="q3" value="b"> To run applications</label></li>
                 <li><label><input type="radio" name="q3" value="c"> To edit text</label></li>
                 <li><label><input type="radio" name="q3" value="d"> To compile code</label></li>
             </ul>
         </div>
+    </div>
 
-        <div class="mb-4">
-            <h2 class="font-bold mb-2">Question 4: What is the binary representation of the decimal number 10?</h2>
-            <ul class="list-disc pl-4">
-                <li><label><input type="radio" name="q4" value="a"> 1010</label></li>
-                <li><label><input type="radio" name="q4" value="b"> 1100</label></li>
-                <li><label><input type="radio" name="q4" value="c"> 1001</label></li>
-                <li><label><input type="radio" name="q4" value="d">
+    <!-- Modal -->
+    <div id="modal" class="modal flex items-center justify-center">
+        <div class="modal-content">
+            <p class="text-lg font-bold mb-4">Warning</p>
+            <p>You have switched tabs or applications. Your quiz has been canceled.</p>
+            <button id="close-modal" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Detect tab/window switching
+        let quizCancelled = false;
+
+        window.addEventListener('blur', () => {
+            if (!quizCancelled) {
+                document.getElementById('modal').style.display = 'flex';
+                quizCancelled = true;
+            }
+        });
+
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+        });
+    </script>
+
+</body>
+
+</html>
